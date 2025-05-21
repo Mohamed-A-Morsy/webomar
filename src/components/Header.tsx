@@ -12,7 +12,7 @@ const Header = () => {
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center py-3">
           <div className="flex items-center">
-            <img src="/logo.svg" alt={t("logoTitle")} className="h-16 w-auto" />
+            <img src="/Logo.png" alt={t("logoTitle")} className="h-16 w-auto" />
             <div className="mr-3 text-right">
               <h1 className="text-secondary text-2xl font-bold">
                 {t("logoTitle")}
