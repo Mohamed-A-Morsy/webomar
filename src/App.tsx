@@ -6,8 +6,9 @@ import NotFound from "@/pages/NotFound";
 import GallerySection from "./components/GallerySection";
 import "./i18n";
 import Halls from "./pages/Halls";
-import Layout from '@/components/Layout';
+import Layout from "@/components/Layout";
 import ShopsContent from "./components/ShopsContent";
+import NewsDetails from "./pages/NewsDetails";
 function App() {
   return (
     <Router>
@@ -15,6 +16,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Index />} />
           <Route path="/news" element={<News />} />
+          <Route path="/news/:id" element={<NewsDetails />} />
           <Route path="/halls" element={<Halls />} />
           <Route path="/gallery" element={<GallerySection />} />
           <Route path="/shops" element={<ShopsContent />} />
