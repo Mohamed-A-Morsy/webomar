@@ -6,6 +6,7 @@
   "teams": "الفرق",
   "gallery": "الصور",
   "about": "عن النادي",
+  "shops": "المتاجر",
   "contact": "اتصل بنا",
   "breakingNews": "الأخبار العاجلة:",
   "news1": "النادي يحقق فوزاً كبيراً في البطولة المحلية بنتيجة 3-0",
@@ -111,5 +112,9 @@
   "LatestArticles": "احدث المقالات",
   "TitleLabel": "العنوان",
   "AuthorLabel": "اسم الكاتب",
-  "articleContent": "المحتوى"
+  "articleContent": "المحتوى",
+  "InvestWisely": "استثمر صح",
+  "willachievewhatyouwant": "سوف تحقق ما تريد",
+  "YourInvestmentInCommercialStoreAtTheYouthDevelopmentCenterinAl-Jazirah": " استثمارك في محل تجاري في مركز التنمية الشبابية بالجزيرة"
+  
 }

@@ -7,6 +7,7 @@ import GallerySection from "./components/GallerySection";
 import "./i18n";
 import Halls from "./pages/Halls";
 import Layout from '@/components/Layout';
+import ShopsContent from "./components/ShopsContent";
 function App() {
   return (
     <Router>
@@ -16,6 +17,7 @@ function App() {
           <Route path="/news" element={<News />} />
           <Route path="/halls" element={<Halls />} />
           <Route path="/gallery" element={<GallerySection />} />
+          <Route path="/shops" element={<ShopsContent />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -6,6 +6,7 @@
   "teams": "Teams",
   "gallery": "Gallery",
   "about": "About Us",
+  "shops": "Stores",
   "contact": "Contact Us",
   "breakingNews": "Breaking News:",
   "news1": "The club wins 3-0 in the local championship",
@@ -110,5 +111,8 @@
   "LatestArticles": "Latest Articles",
   "AuthorLabel": "Author ",
   "TitleLabel": "Title",
-  "articleContent": "Content"
+  "articleContent": "Content",
+  "InvestWisely": "Invest wisely",
+  "willachievewhatyouwant": "will achieve what you want",
+  "YourInvestmentInCommercialStoreAtTheYouthDevelopmentCenterinAl-Jazirah": "Your investment in a commercial store at the Youth Development Center in Al-Jazirah"
 }
