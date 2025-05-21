@@ -12,9 +12,9 @@ const Header = () => {
         <div className="flex flex-col md:flex-row justify-between items-center py-3">
           {/* Logo */}
           <div className="flex items-center">
-            <img src="/logo.svg" alt="نادي الرياضة" className="h-16 w-auto" />
+            <img src="/Logo.png" alt="مركز شباب الجزيرة" className="h-16 w-auto" />
             <div className="mr-3 text-right">
-              <h1 className="text-secondary text-2xl font-bold">نادي الرياضة</h1>
+              <h1 className="text-secondary text-2xl font-bold">مركز التنمية الشبابية بالجزيرة</h1>
               <p className="text-gray-600 text-sm">النادي الرياضي الأول</p>
             </div>
           </div>

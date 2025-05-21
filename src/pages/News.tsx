@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import axiosInstance from './../axiosConfig/instance';
 
 const newsItems = [
   {
@@ -73,6 +74,13 @@ const News = () => {
     activePage * itemsPerPage + itemsPerPage
   );
   
+  // const getNews = () => {
+  //   try{
+  //     const res = axiosInstance.get()
+  //   }catch(err){
+  //     console.log(err)
+  //   }
+  // }
   const goToNextPage = () => {
     setActivePage((prev) => (prev + 1) % totalPages);
   };
