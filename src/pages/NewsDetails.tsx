@@ -1,22 +1,25 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import axiosInstance from './../axiosConfig/instance';
+import axiosInstance from "./../axiosConfig/instance";
 import LoadingSpinner from "@/components/ui/loader";
-
+import { useTranslation } from "react-i18next";
 
 const NewsDetails = () => {
   const { id } = useParams();
   const [item, setItem] = useState(null);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
-    axiosInstance.get(`ImageContents/get?id=${id}`)
-      .then(res => setItem(res.data.data))
-      .catch(console.error);
-  }, [id]);
+    const langParam = i18n.language === "en" ? "en" : "";
 
-  if (!item) return   <LoadingSpinner  />
-;
+    axiosInstance
+      .get(`ImageContents/get?id=${id}&language=${langParam}`)
+      .then((res) => setItem(res.data.data))
+      .catch(console.error);
+  }, [id, i18n.language]);
+
+  if (!item) return <LoadingSpinner />;
 
   return (
     <div className="container mx-auto px-4 py-12">

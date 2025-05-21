@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { ChevronRight, ChevronLeft } from 'lucide-react';
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import axiosInstance from './../axiosConfig/instance';
-import LoadingSpinner from '@/components/ui/loader';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { ChevronRight, ChevronLeft } from "lucide-react";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import axiosInstance from "./../axiosConfig/instance";
+import LoadingSpinner from "@/components/ui/loader";
+import { useTranslation } from "react-i18next";
 
 const News = () => {
   const [newsItems, setNewsItems] = useState([]);
@@ -13,24 +20,29 @@ const News = () => {
   const totalPages = Math.ceil(newsItems.length / itemsPerPage);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-
+  const { t } = useTranslation();
+  const { i18n } = useTranslation();
 
   const visibleNews = newsItems.slice(
     activePage * itemsPerPage,
     activePage * itemsPerPage + itemsPerPage
   );
 
-const getNews = async () => {
-  try {
-    setLoading(true);
-    const res = await axiosInstance.get('ImageContents/GetAll');
-    setNewsItems(res.data.data);
-  } catch (err) {
-    console.log(err);
-  } finally {
-    setLoading(false);
-  }
-};
+  const getNews = async () => {
+    try {
+      setLoading(true);
+      const langParam = i18n.language === "en" ? "en" : "";
+
+      const res = await axiosInstance.get(
+        `ImageContents/GetAll?language=${langParam}`
+      );
+      setNewsItems(res.data.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const goToNextPage = () => {
     setActivePage((prev) => (prev + 1) % totalPages);
@@ -42,8 +54,8 @@ const getNews = async () => {
 
   useEffect(() => {
     getNews();
-  }, []);
-   if (loading) return   <LoadingSpinner  />
+  }, [i18n.language]);
+  if (loading) return <LoadingSpinner />;
 
   return (
     <div className="min-h-screen bg-white">
@@ -51,7 +63,9 @@ const getNews = async () => {
         {/* Hero Section */}
         <div className="bg-secondary py-12">
           <div className="container mx-auto px-4">
-            <h1 className="text-4xl font-bold text-white text-center mb-4">أخبار النادي</h1>
+            <h1 className="text-4xl font-bold text-white text-center mb-4">
+              أخبار النادي
+            </h1>
             <p className="text-white text-center max-w-2xl mx-auto">
               تابع آخر أخبار وفعاليات النادي وكن على اطلاع دائم بكل جديد
             </p>
@@ -89,7 +103,10 @@ const getNews = async () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
               {visibleNews.map((news) => (
-                <Card key={news.id} className="news-card overflow-hidden border border-gray-200">
+                <Card
+                  key={news.id}
+                  className="news-card overflow-hidden border border-gray-200"
+                >
                   <div className="h-64 overflow-hidden">
                     <img
                       src={`data:image/${news.image.imageExtension};base64,${news.image.img}`}
@@ -116,7 +133,9 @@ const getNews = async () => {
                     <Button
                       variant="link"
                       className="text-primary p-0 hover:text-primary-dark"
-                      onClick={() => navigate(`/news/${news.id}`, { state: { news } })}
+                      onClick={() =>
+                        navigate(`/news/${news.id}`, { state: { news } })
+                      }
                     >
                       قراءة المزيد
                     </Button>
@@ -129,9 +148,11 @@ const getNews = async () => {
               {Array.from({ length: totalPages }).map((_, index) => (
                 <Button
                   key={index}
-                  variant={activePage === index ? 'default' : 'outline'}
+                  variant={activePage === index ? "default" : "outline"}
                   className={`rounded-full w-10 h-10 p-0 ${
-                    activePage === index ? 'bg-primary' : 'border-primary text-primary'
+                    activePage === index
+                      ? "bg-primary"
+                      : "border-primary text-primary"
                   }`}
                   onClick={() => setActivePage(index)}
                 >

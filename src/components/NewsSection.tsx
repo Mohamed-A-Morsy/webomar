@@ -127,7 +127,7 @@ const NewsSection = () => {
         </div>
 
         <div className="text-center mt-8">
-          <Button className="bg-primary hover:bg-primary-dark text-white">
+          <Button className="bg-primary hover:bg-primary-dark text-white" onClick={() => navigate("/news")}>
             عرض كل الأخبار
           </Button>
         </div>
