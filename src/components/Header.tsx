@@ -69,7 +69,7 @@ const Header = () => {
       </div>
 
       {/* News Ticker */}
-      <div className="bg-secondary py-2 text-white overflow-hidden">
+      {/* <div className="bg-secondary py-2 text-white overflow-hidden">
         <div className="ticker-container">
           <div className="ticker-content">
             <span className="font-bold ml-4">{t("breakingNews")}</span>
@@ -79,7 +79,7 @@ const Header = () => {
             <span className="ml-6">{t("news4")}</span>
           </div>
         </div>
-      </div>
+      </div> */}
     </header>
   );
 };
