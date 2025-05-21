@@ -1,31 +1,34 @@
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axiosInstance from "@/axiosConfig/instance";
 import { Button } from '@/components/ui/button';
 
-const galleryImages = [
-  {
-    id: 1,
-    src: "https://images.unsplash.com/photo-1508098682722-e99c1a7329d0?q=80&w=1000&auto=format&fit=crop",
-    alt: "ملعب النادي",
-  },
-  {
-    id: 2,
-    src: "https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=1000&auto=format&fit=crop",
-    alt: "تدريبات الفريق",
-  },
-  {
-    id: 3,
-    src: "https://images.unsplash.com/photo-1434596922112-19c563067271?q=80&w=1000&auto=format&fit=crop",
-    alt: "أكاديمية الشباب",
-  },
-  {
-    id: 4,
-    src: "https://images.unsplash.com/photo-1502904550040-7534597429ae?q=80&w=1000&auto=format&fit=crop",
-    alt: "بطولة كأس النادي",
-  },
-];
+// Define an interface for the picture data
+interface Picture {
+  id: string; // or number, depending on your data structure
+  src: string;
+  alt: string;
+  img: string;
+  imageExtension: string;
+}
 
-const GallerySection = () => {
+const GallerySection: React.FC = () => {
+  const [pics, setPics] = useState<Picture[]>([]); // Use the Picture interface for state
+  const [error, setError] = useState<string | null>(null); // State for error handling
+
+  useEffect(() => {
+    const fetchPics = async () => {
+      try {
+        const response = await axiosInstance.get("/Image/GetAll");
+        console.log(response.data.data);
+        setPics(response.data.data);
+      } catch (error) {
+        console.error("Error fetching images", error);
+        setError("Failed to load images."); // Set error message
+      }
+    };
+    fetchPics();
+  }, []);
+
   return (
     <section className="py-12 bg-gray-50">
       <div className="container mx-auto">
@@ -36,11 +39,13 @@ const GallerySection = () => {
           </p>
         </div>
         
+        {error && <p className="text-red-500 text-center">{error}</p>} {/* Display error message */}
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {galleryImages.map((image) => (
+          {pics.map((image) => (
             <div key={image.id} className="overflow-hidden rounded-lg h-48 md:h-64 group relative cursor-pointer">
               <img 
-                src={image.src} 
+                src={`data:image/${image.imageExtension};base64,${image.img}`} 
                 alt={image.alt} 
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
