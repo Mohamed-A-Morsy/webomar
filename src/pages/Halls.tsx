@@ -1,6 +1,6 @@
 
 const Halls = () => {
-    return <div></div>;
+    return <div>test</div>;
 };
 
 export default Halls;
