@@ -20,6 +20,7 @@
   "deleteaccount": "حذف حساب",
   "login": "تسجيل دخول",
   "event": "حدث",
+  "halls": "القاعات",
   "eventdetails": "تفاصيل حدث",
   "Abouttheisland": "عن الجزيرة",
   "SpeechbythePresident": "كلمة رئيس مركز الجزيرة",
@@ -115,6 +116,6 @@
   "articleContent": "المحتوى",
   "InvestWisely": "استثمر صح",
   "willachievewhatyouwant": "سوف تحقق ما تريد",
-  "YourInvestmentInCommercialStoreAtTheYouthDevelopmentCenterinAl-Jazirah": " استثمارك في محل تجاري في مركز التنمية الشبابية بالجزيرة"
-  
+  "YourInvestmentInCommercialStoreAtTheYouthDevelopmentCenterinAl-Jazirah": " استثمارك في محل تجاري في مركز التنمية الشبابية بالجزيرة",
+  "HallsAvailable": "القاعات المتاحة"
 }
