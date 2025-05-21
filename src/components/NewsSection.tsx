@@ -12,6 +12,7 @@ import { ChevronRight, ChevronLeft } from "lucide-react";
 import axiosInstance from "./../axiosConfig/instance";
 import LoadingSpinner from "./ui/loader";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const NewsSection = () => {
   const [activePage, setActivePage] = useState(0);
@@ -20,6 +21,7 @@ const NewsSection = () => {
   const totalPages = Math.ceil(newsItems.length / itemsPerPage);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { t,i18n } = useTranslation();
 
   const visibleNews = newsItems.slice(
     activePage * itemsPerPage,
@@ -37,7 +39,9 @@ const NewsSection = () => {
   const getNews = async () => {
     try {
       setLoading(true);
-      const res = await axiosInstance.get("ImageContents/GetAll");
+      const langParam = i18n.language === "en" ? "en" : "";
+
+      const res = await axiosInstance.get(`ImageContents/GetAll?language=${langParam}`);
       setNewsItems(res.data.data);
     } catch (err) {
       console.log(err);
@@ -127,7 +131,10 @@ const NewsSection = () => {
         </div>
 
         <div className="text-center mt-8">
-          <Button className="bg-primary hover:bg-primary-dark text-white" onClick={() => navigate("/news")}>
+          <Button
+            className="bg-primary hover:bg-primary-dark text-white"
+            onClick={() => navigate("/news")}
+          >
             عرض كل الأخبار
           </Button>
         </div>
