@@ -91,7 +91,7 @@ const News = () => {
   
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      {/* <Header /> */}
       <main>
         {/* Hero Section */}
         <div className="bg-secondary py-12">
