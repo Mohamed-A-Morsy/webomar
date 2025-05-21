@@ -5,6 +5,7 @@ import Index from '@/pages/Index';
 import News from '@/pages/News';
 import NotFound from '@/pages/NotFound';
 import GallerySection from './components/GallerySection';
+import './i18n';
 
 function App() {
   return (
