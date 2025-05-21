@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/sonner";
 import Index from '@/pages/Index';
 import News from '@/pages/News';
 import NotFound from '@/pages/NotFound';
+import './i18n';
 
 function App() {
   return (
