@@ -39,7 +39,7 @@ const Header = () => {
             <Button asChild variant="ghost">
               <Link to="/about">عن النادي</Link>
             </Button>
-            <Button asChild variant="primary" className="bg-primary text-white hover:bg-primary-dark mr-2">
+            <Button asChild variant="default" className="bg-primary text-white hover:bg-primary-dark mr-2">
               <Link to="/contact">اتصل بنا</Link>
             </Button>
           </nav>
