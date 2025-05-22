@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from "@/axiosConfig/instance";
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
-import { Loader2 } from 'lucide-react'; // Loading spinner icon
-import LoadingSpinner from './ui/loader';
+import { Loader2 } from 'lucide-react'; // Assuming you have Lucide or similar icon library
+import LoadingSpinner from '@/components/ui/loader';
 
 interface Picture {
   id: string;
@@ -13,17 +12,16 @@ interface Picture {
   imageExtension: string;
 }
 
-const GallerySection: React.FC = () => {
+const Gallery: React.FC = () => {
   const [pics, setPics] = useState<Picture[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
+  const [showAll, setShowAll] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchPics = async () => {
       try {
-        setLoading(true);
-        const response = await axiosInstance.get("/Image/GetAll");
+        const response = await axiosInstance.get("Image/GetAll");
         setPics(response.data.data);
       } catch (error) {
         console.error("Error fetching images", error);
@@ -35,7 +33,7 @@ const GallerySection: React.FC = () => {
     fetchPics();
   }, []);
 
-  const displayedPics = pics.slice(0, 4);
+  const displayedPics = showAll ? pics : pics.slice(0, 8);
 
   return (
     <section className="py-12 bg-gray-50">
@@ -48,16 +46,18 @@ const GallerySection: React.FC = () => {
         </div>
 
         {error && <p className="text-red-500 text-center">{error}</p>}
-
         {loading ? (
-          <div className="flex justify-center items-center h-48">
+          <div className="flex justify-center items-center h-40">
             <LoadingSpinner/>
           </div>
         ) : (
           <>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {displayedPics.map((image) => (
-                <div key={image.id} className="overflow-hidden rounded-lg h-48 md:h-64 group relative cursor-pointer">
+                <div
+                  key={image.id}
+                  className="overflow-hidden rounded-lg h-48 md:h-64 group relative cursor-pointer"
+                >
                   <img
                     src={`data:image/${image.imageExtension};base64,${image.img}`}
                     alt={image.alt}
@@ -72,11 +72,16 @@ const GallerySection: React.FC = () => {
               ))}
             </div>
 
-            <div className="text-center mt-8">
-              <Button className="bg-primary hover:bg-primary-dark text-white" onClick={() => navigate("/gallery")}>
-                المزيد من الصور
-              </Button>
-            </div>
+                {pics.length > 6 && (
+              <div className="text-center mt-8">
+                <Button
+                  className="bg-primary hover:bg-primary-dark text-white"
+                  onClick={() => setShowAll((prev) => !prev)}
+                >
+                  {showAll ? 'عرض أقل' : 'عرض المزيد'}
+                </Button>
+              </div>
+            )}
           </>
         )}
       </div>
@@ -84,4 +89,4 @@ const GallerySection: React.FC = () => {
   );
 };
 
-export default GallerySection;
+export default Gallery;

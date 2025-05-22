@@ -11,6 +11,10 @@ import ShopsContent from "./components/ShopsContent";
 import NewsDetails from "./pages/NewsDetails";
 import ActivityType from "./pages/ActivityType";
 import SubActivities from "./pages/SubActivities";
+import Gallery from "./pages/Gallery";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   return (
     <Router>
@@ -20,15 +24,25 @@ function App() {
           <Route path="/news" element={<News />} />
           <Route path="/news/:id" element={<NewsDetails />} />
           <Route path="/halls" element={<Halls />} />
-          <Route path="/gallery" element={<GallerySection />} />
+          <Route path="/GallerySection" element={<GallerySection />} />
+          <Route path="/gallery" element={<Gallery />} />
           <Route path="/shops" element={<ShopsContent />} />
-          <Route path="/activity" element={<ActivityType />} />
-          <Route path="/SubActivities/:id" element={<SubActivities />} />
           
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <Toaster />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />{" "}
     </Router>
   );
 }
