@@ -3,6 +3,7 @@ import axiosInstance from "@/axiosConfig/instance";
 import DOMPurify from "dompurify";
 import { ChevronLeft } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import LoadingSpinner from "./ui/loader";
 
 interface Shop {
   id: number;
@@ -24,19 +25,27 @@ const ShopsContent: React.FC = () => {
   const sanitizeHtml = (htmlContent: string) => {
     return DOMPurify.sanitize(htmlContent);
   };
+    const [loading, setLoading] = useState(false);
+  
 
-  useEffect(() => {
     const fetchCards = async () => {
       try {
-        const response = await axiosInstance.get(`/Shop/GetAll?language=${langDir === "en" ? "en" : ""}`);
+        setLoading(true);
+        const langParam = i18n.language === "en" ? "en" : "";
+        const response = await axiosInstance.get(`/Shop/GetAll?language=${langParam}`);
         console.log(response.data);
         setShops(response.data.data);
       } catch (error) {
         console.error("Error fetching images", error);
+      }finally{
+        setLoading(false);
       }
     };
+
+  useEffect(() => {
     fetchCards();
   }, [langDir]);
+
 
   const truncateText = (text: string | null, maxLength: number): string => {
     if (!text) {
@@ -47,6 +56,9 @@ const ShopsContent: React.FC = () => {
     }
     return text.substring(0, maxLength) + "...";
   };
+
+    if (loading) return <LoadingSpinner />;
+
 
   return (
     <>
@@ -59,7 +71,7 @@ const ShopsContent: React.FC = () => {
             <p className="text-white text-center max-w-2xl mx-auto">{t("willachievewhatyouwant")}</p>
           </div>
         </div>
-    <div id="sportContent" className="">
+    <div id="sportContent" className="" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <div className="w-[85%] m-auto grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-6 gap-y-12 py-20">
         {shops.map((item) => (
           item.archive === false && (
