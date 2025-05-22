@@ -27,6 +27,8 @@ function App() {
           <Route path="/GallerySection" element={<GallerySection />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/shops" element={<ShopsContent />} />
+          <Route path="/activity" element={<ActivityType />} />
+          <Route path="/SubActivities/:id" element={<SubActivities />} />
           
         </Route>
         <Route path="*" element={<NotFound />} />
