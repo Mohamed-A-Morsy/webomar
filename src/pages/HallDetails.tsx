@@ -26,7 +26,7 @@ const HallDetails = () => {
       .then((res) => setHall(res.data.data))
       .catch((err) => console.error("Error fetching event", err))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, i18n.language]);
 
   const sanitizeHtml = (html: string) => DOMPurify.sanitize(html);
   if (loading) return <LoadingSpinner />;
