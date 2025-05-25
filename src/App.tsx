@@ -14,6 +14,7 @@ import SubActivities from "./pages/SubActivities";
 import Gallery from "./pages/Gallery";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Videos from "./pages/Vidoes";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/shops" element={<ShopsContent />} />
           <Route path="/activity" element={<ActivityType />} />
           <Route path="/SubActivities/:id" element={<SubActivities />} />
+          <Route path="/videos" element={<Videos />} />
           
         </Route>
         <Route path="*" element={<NotFound />} />
