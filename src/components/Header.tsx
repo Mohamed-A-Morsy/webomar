@@ -19,7 +19,13 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center py-3">
           <div className="flex flex-col md:flex-row items-center md:items-start gap-2 md:gap-4">
-            <img src="/Logo.png" alt={t("logoTitle")} className="h-16 w-auto" />
+            <Link to="/">
+              <img
+                src="/Logo.png"
+                alt={t("logoTitle")}
+                className="h-14 w-auto cursor-pointer"
+              />
+            </Link>
 
             <div
               className={clsx(

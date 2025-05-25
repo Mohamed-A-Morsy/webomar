@@ -24,9 +24,6 @@ const Halls = () => {
   const [halls, setHalls] = useState<Hall[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const getImageUrl = (base64Data, extension) => {
-    return `data:image/${extension.replace(".", "")};base64,${base64Data}`;
-  };
   const gethHalls = async () => {
     try {
       setLoading(true);
@@ -69,7 +66,7 @@ const Halls = () => {
               >
                 <div className="h-48 overflow-hidden">
                   <img
-                    src={getImageUrl(hall.image, hall.imageExtension)}
+                    src={`data:image/jpeg;base64,${hall.image}`}
                     alt={hall.name}
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                   />
