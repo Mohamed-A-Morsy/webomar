@@ -2,15 +2,14 @@ import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ChevronRight, ChevronLeft } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import axiosInstance from "./../axiosConfig/instance";
+import LoadingSpinner from "@/components/ui/loader";
+import axiosInstance from "@/axiosConfig/instance";
+import { Link } from "react-router-dom";
 
 interface Hall {
   id: number;
@@ -21,28 +20,33 @@ interface Hall {
 }
 
 const Halls = () => {
-  const { t } = useTranslation();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [halls, setHalls] = useState<Hall[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const getImageUrl = (base64Data, extension) => {
     return `data:image/${extension.replace(".", "")};base64,${base64Data}`;
   };
   const gethHalls = async () => {
     try {
+      setLoading(true);
+
       const langParam = i18n.language === "en" ? "en" : "";
       const response = await axiosInstance.get(
         `/Hall/GetAll?language=${langParam}`
       );
-      console.log(response.data.data);
       setHalls(response.data.data || []);
     } catch (error) {
       console.error("Error fetching halls", error);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
     gethHalls();
   }, [i18n.language]);
+  if (loading) return <LoadingSpinner />;
+
   return (
     <section
       className="py-12 bg-gray-50"
@@ -72,21 +76,18 @@ const Halls = () => {
                 </div>
                 <CardHeader>
                   <CardTitle className="text-xl">{hall.name}</CardTitle>
-                  <CardDescription className="text-gray-500 text-sm">
-                    {/* You can add capacity if available in the API response */}
-                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div dangerouslySetInnerHTML={{ __html: hall.details }} />
                 </CardContent>
-                {/* <CardFooter>
-                  <Button
-                    variant="link"
-                    className="text-primary p-0 hover:text-primary-dark"
+                <CardFooter className="flex justify-center">
+                  <Link
+                    to={`/halls/${hall.id}`}
+                    className="bg-secondary text-white w-[40%] py-2 rounded-lg hover:bg-secondary2 text-center"
                   >
-                    {t("bookingDetails")}
-                  </Button>
-                </CardFooter> */}
+                    {t("halldetails")}
+                  </Link>
+                </CardFooter>
               </Card>
             ))}
           </div>

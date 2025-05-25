@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import AdsSection from "@/components/AdsSection";
 import SocialActivitiesSection from "@/components/SocialActivitiesSection";
 import AdsPanner from "@/components/AdsPanner";
+import VideoSection from "@/components/VideoSection";
 
 const Index = () => {
   return (
@@ -19,6 +20,7 @@ const Index = () => {
       <SocialActivitiesSection />
       <AdsSection />
       <GallerySection />
+      <VideoSection />
       <ContactSection />
     </>
   );
