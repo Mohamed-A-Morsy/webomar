@@ -1,20 +1,55 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import axiosInstance from './../axiosConfig/instance';
 
 const Footer = () => {
-  return (
+ const [aboutClub, setAboutClub] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const { i18n } = useTranslation();
+  const plainText = aboutClub?.details?.replace(/<[^>]+>/g, '') || '';
+
+  const getAboutClub = async () => {
+    try {
+      setLoading(true);
+      const langParam = i18n.language === "en" ? "en" : "";
+      const response = await axiosInstance.get(
+        `AboutUs/Get?language=${langParam}`
+      );
+      setAboutClub(response.data.data);
+    } catch (error) {
+      console.error("Error fetching about us", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getAboutClub();
+  }, [i18n.language]);  
+return (
     <footer className="bg-secondary text-white pt-12 pb-6">
-      <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div className="container mx-auto ">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 ">
           {/* About */}
           <div>
-            <h4 className="font-bold text-lg mb-4">عن النادي</h4>
-            <p className="text-gray-300 text-sm mb-4">
-              نادي رياضي عريق تأسس عام 1945، يقدم مجموعة متنوعة من الأنشطة الرياضية والاجتماعية للأعضاء والمجتمع.
-            </p>
+            <h4 className="font-bold text-lg mb-4">{aboutClub?.title || "مركز التنمية الشبابية بالجزيرة"
+}
+</h4>
+            <p className="text-gray-300 text-sm md:text-sm mb-6 opacity-90">
+             {loading ? (
+               <div className="space-y-2">
+                 <div className="h-4 w-full bg-gray-300 animate-pulse rounded"></div>
+                 <div className="h-4 w-11/12 bg-gray-300 animate-pulse rounded"></div>
+                 <div className="h-4 w-10/12 bg-gray-300 animate-pulse rounded"></div>
+               </div>
+             ) : (
+               plainText
+             )}
+           </p>
             <div className="flex space-x-3 space-x-reverse">
               <a href="#" className="text-white hover:text-accent">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">

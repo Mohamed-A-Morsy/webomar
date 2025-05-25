@@ -20,7 +20,7 @@ const ActivityIcon = () => (
 
 const CARD_WIDTH = 200;
 
-const ActivitiesSection = () => {
+const SocialActivitiesSection = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [ActivityTypes, setActivityTypes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +28,7 @@ const ActivitiesSection = () => {
 
   const getActivityTypes = async () => {
     try {
-      const res = await axiosInstance.get("GameType/GetAll");
+      const res = await axiosInstance.get("ActivityType/GetAll");
       setActivityTypes(res.data.data);
     } catch (error) {
       console.log(error);
@@ -47,16 +47,16 @@ const ActivitiesSection = () => {
     }
   };
    const handleCardClick = (activity: any) => {
-    navigate("/games-by-type", { state: { games: activity.games, typeName: activity.name } });
+    navigate("/activities-by-type", { state: { games: activity.games, typeName: activity.name } });
   };
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-gray-50 my-3">
       <div className="container mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-secondary mb-4">الأنشطة الرياضية</h2>
+          <h2 className="text-3xl font-bold text-secondary mb-4">الأنشطة الاجتماعية</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            يقدم النادي مجموعة متنوعة من الأنشطة الرياضية للجميع، من المبتدئين إلى
+            يقدم النادي مجموعة متنوعة من الأنشطة الاجتماعية للجميع، من المبتدئين إلى
             المحترفين، وبإشراف مدربين متخصصين ذوي خبرة عالية.
           </p>
         </div>
@@ -108,4 +108,4 @@ const ActivitiesSection = () => {
   );
 };
 
-export default ActivitiesSection;
+export default SocialActivitiesSection;

@@ -14,6 +14,9 @@ import SubActivities from "./pages/SubActivities";
 import Gallery from "./pages/Gallery";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Game from "./pages/Game";
+import SocialActivitiesSection from "./components/SocialActivitiesSection";
+import SocialActivities from "./pages/SocialActivities";
 
 function App() {
   return (
@@ -29,6 +32,10 @@ function App() {
           <Route path="/shops" element={<ShopsContent />} />
           <Route path="/activity" element={<ActivityType />} />
           <Route path="/SubActivities/:id" element={<SubActivities />} />
+          <Route path="/games-by-type" element={<Game />} />
+          <Route path="/activities-by-type" element={<SocialActivities />} />
+
+
           
         </Route>
         <Route path="*" element={<NotFound />} />
