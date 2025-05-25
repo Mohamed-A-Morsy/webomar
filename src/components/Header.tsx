@@ -1,23 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import MobileHeader from "./MobileHeader";
+import clsx from "clsx";
 
 const Header = () => {
-  const { t } = useTranslation();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleLanguage = () => i18n.changeLanguage(isArabic ? "en" : "ar");
+
+  const toggleMenu = () => setMenuOpen(!menuOpen);
   return (
-    <header className="bg-white shadow-md">
-      <div className="container mx-auto">
+    <header className="bg-white shadow-md" dir={isArabic ? "rtl" : "ltr"}>
+      <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center py-3">
-          <div className="flex items-center">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-2 md:gap-4">
             <img src="/Logo.png" alt={t("logoTitle")} className="h-16 w-auto" />
-            <div className="mr-3 text-right">
-              <h1 className="text-secondary text-2xl font-bold">
+
+            <div
+              className={clsx(
+                "text-center md:text-start",
+                isArabic ? "md:text-right" : "md:text-left"
+              )}
+            >
+              <h1 className="text-secondary text-lg sm:text-xl md:text-2xl font-bold">
                 {t("logoTitle")}
               </h1>
-              <p className="text-gray-600 text-sm">{t("logoSubtitle")}</p>
+              <p
+                className={clsx(
+                  "text-gray-600 text-sm",
+                  isArabic ? "md:text-right" : "md:text-left"
+                )}
+              >
+                {t("logoSubtitle")}
+              </p>
             </div>
           </div>
 
@@ -46,43 +66,28 @@ const Header = () => {
             <Button asChild variant="ghost">
               <Link to="/shops">{t("shops")}</Link>
             </Button>
-            <Button
-              asChild
-              variant="default"
-              className="bg-primary text-white hover:bg-primary-dark mr-2"
-            >
-              <Link to="/contact">{t("contact")}</Link>
-            </Button>
           </nav>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() =>
-              i18n.changeLanguage(i18n.language === "ar" ? "en" : "ar")
-            }
-          >
-            {i18n.language === "ar" ? "English" : "العربية"}
-          </Button>
-          <div className="md:hidden flex items-center mt-3 md:mt-0">
-            <Button variant="outline" size="icon">
-              <ChevronLeft className="h-4 w-4" />
+          <div className="flex items-center space-x-2 space-x-reverse md:space-x-0">
+            <Button variant="outline" size="sm" onClick={toggleLanguage}>
+              {isArabic ? "English" : "العربية"}
             </Button>
+            <div className="md:hidden">
+              <Button variant="ghost" size="icon" onClick={toggleMenu}>
+                {menuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* News Ticker */}
-      {/* <div className="bg-secondary py-2 text-white overflow-hidden">
-        <div className="ticker-container">
-          <div className="ticker-content">
-            <span className="font-bold ml-4">{t("breakingNews")}</span>
-            <span className="ml-6">{t("news1")}</span>
-            <span className="ml-6">{t("news2")}</span>
-            <span className="ml-6">{t("news3")}</span>
-            <span className="ml-6">{t("news4")}</span>
-          </div>
-        </div>
-      </div> */}
+        {/* Mobile Nav */}
+        {menuOpen && (
+          <MobileHeader isArabic={isArabic} toggleMenu={toggleMenu} />
+        )}
+      </div>
     </header>
   );
 };
