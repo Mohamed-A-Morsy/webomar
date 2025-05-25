@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 import LoadingSpinner from "@/components/ui/loader";
 import axiosInstance from "@/axiosConfig/instance";
+import { Link } from "react-router-dom";
 
 interface Hall {
   id: number;
@@ -73,6 +80,14 @@ const Halls = () => {
                 <CardContent>
                   <div dangerouslySetInnerHTML={{ __html: hall.details }} />
                 </CardContent>
+                <CardFooter className="flex justify-center">
+                  <Link
+                    to={`/halls/${hall.id}`}
+                    className="bg-secondary text-white w-[40%] py-2 rounded-lg hover:bg-secondary2 text-center"
+                  >
+                    {t("halldetails")}
+                  </Link>
+                </CardFooter>
               </Card>
             ))}
           </div>

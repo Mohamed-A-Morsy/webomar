@@ -16,6 +16,7 @@ import SubActivities from "./pages/SubActivities";
 import Gallery from "./pages/Gallery";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import HallDetails from "./pages/HallDetails";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/news" element={<News />} />
           <Route path="/news/:id" element={<NewsDetails />} />
           <Route path="/halls" element={<Halls />} />
+          <Route path="/halls/:id" element={<HallDetails />} />
           <Route path="/gallery" element={<GallerySection />} />
           <Route path="/events" element={<Events />} />
           <Route path="/events/:id" element={<EventDetails />} />
@@ -35,7 +37,6 @@ function App() {
           <Route path="/shops" element={<ShopsContent />} />
           <Route path="/activity" element={<ActivityType />} />
           <Route path="/SubActivities/:id" element={<SubActivities />} />
-          
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
