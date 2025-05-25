@@ -6,6 +6,9 @@ import ActivitiesSection from "@/components/ActivitiesSection";
 import GallerySection from "@/components/GallerySection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import AdsSection from "@/components/AdsSection";
+import SocialActivitiesSection from "@/components/SocialActivitiesSection";
+import AdsPanner from "@/components/AdsPanner";
 import VideoSection from "@/components/VideoSection";
 
 const Index = () => {
@@ -14,6 +17,8 @@ const Index = () => {
       <HeroSection />
       <NewsSection />
       <ActivitiesSection />
+      <SocialActivitiesSection />
+      <AdsSection />
       <GallerySection />
       <VideoSection />
       <ContactSection />

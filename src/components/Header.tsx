@@ -60,9 +60,9 @@ const Header = () => {
             <Button asChild variant="ghost">
               <Link to="/gallery">{t("gallery")}</Link>
             </Button>
-            <Button asChild variant="ghost">
+            {/* <Button asChild variant="ghost">
               <Link to="/activity">{t("ActivityType")}</Link>
-            </Button>
+            </Button> */}
             <Button asChild variant="ghost">
               <Link to="/shops">{t("shops")}</Link>
             </Button>
