@@ -41,7 +41,7 @@ const Header = () => {
               <Link to="/gallery">{t("gallery")}</Link>
             </Button>
             <Button asChild variant="ghost">
-              <Link to="/about">{t("about")}</Link>
+              <Link to="/activity">{t("ActivityType")}</Link>
             </Button>
             <Button asChild variant="ghost">
               <Link to="/shops">{t("shops")}</Link>
