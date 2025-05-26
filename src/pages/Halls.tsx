@@ -42,6 +42,7 @@ const Halls = () => {
   useEffect(() => {
     gethHalls();
   }, [i18n.language]);
+  
   if (loading) return <LoadingSpinner />;
 
   return (
