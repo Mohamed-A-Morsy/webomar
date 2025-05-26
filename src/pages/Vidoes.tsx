@@ -3,6 +3,8 @@ import axiosInstance from "@/axiosConfig/instance";
 import { Button } from '@/components/ui/button';
 import LoadingSpinner from '../components/ui/loader';
 import YouTube from "react-youtube";
+import { useTranslation } from "react-i18next";
+
 
 interface Video {
   id: string;
@@ -11,6 +13,7 @@ interface Video {
 }
 
 const Videos: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const [videos, setVideos] = useState<Video[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -66,12 +69,12 @@ const Videos: React.FC = () => {
   const displayedVideo = showAll ? videos : videos.slice(0, 8);
 
   return (
-    <section className="py-12 bg-gray-50">
+    <section className="py-12 bg-gray-50"  dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <div className="container mx-auto">
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-secondary mb-4">معرض الفديوهات</h2>
+          <h2 className="text-3xl font-bold text-secondary mb-4">{t("VideosGallery")}</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            تسجيلات مميزة من أنشطة وفعاليات النادي المختلفة
+             {t("FeaturedRecordingsOfTheClub'sVariousActivitiesAndEvents")}
           </p>
         </div>
 
