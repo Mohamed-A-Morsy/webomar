@@ -12,14 +12,22 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 
 
 const MembersChairman = () => {
+    const nevigate = useNavigate()
     const [members, setMembers] = useState([])
     const [loading, setLoading] = useState(true);
     const { t } = useTranslation();
     const { i18n } = useTranslation();
+      const [flippedCardId, setFlippedCardId] = useState<number | null>(null);
+    
+
+    const handleFlip = (id: number) => {
+    setFlippedCardId((prev) => (prev === id ? null : id));
+  };
     
 
     const getMembers = async () => {
@@ -64,11 +72,16 @@ const MembersChairman = () => {
     <div>
         <h1  className="text-4xl text-center mb-11 font-semibold">{t("BoardOfDirectors")} </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-          {members.map((member) => (
+          {members.map((member) => {
+            const isFlipped = flippedCardId === member.id;
+            return(
             <Card
               key={member.id}
-              className="news-card overflow-hidden border border-gray-200"
-            >
+              className={`relative w-full h-full transition-transform duration-700 transform-style-preserve-3d ${
+                  isFlipped ? "rotate-y-180" : ""
+                }`}
+            //   className="news-card overflow-hidden border border-gray-200"
+                onClick={() => handleFlip(member.id)}            >
               <div className="h-48 overflow-hidden">
                 {
                     member.img ? <img
@@ -99,9 +112,32 @@ const MembersChairman = () => {
                  
                 </Button> */}
               </CardFooter>
+              <div className="absolute inset-0 backface-hidden rotate-y-180 bg-white border border-gray-200 rounded-lg shadow-md p-4 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-lg font-bold text-secondary mb-2 text-center">
+                       {truncateText(member.details, 1000)}
+                    </h3>
+                  </div>
+                </div>
             </Card>
-          ))}
+            
+          )
+        })}
         </div>
+         <style>{`
+        .perspective {
+          perspective: 1200px;
+        }
+        .transform-style-preserve-3d {
+          transform-style: preserve-3d;
+        }
+        .backface-hidden {
+          backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+          transform: rotateY(180deg);
+        }
+      `}</style>
     </div>
   )
 }
