@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import axiosInstance from "@/axiosConfig/instance";
-import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
-import { Loader2 } from 'lucide-react'; // Loading spinner icon
-import LoadingSpinner from './ui/loader';
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react"; // Loading spinner icon
+import LoadingSpinner from "./ui/loader";
+import { useTranslation } from "react-i18next";
 
 interface Picture {
   id: string;
@@ -14,6 +15,7 @@ interface Picture {
 }
 
 const GallerySection: React.FC = () => {
+  const { t } = useTranslation();
   const [pics, setPics] = useState<Picture[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -41,9 +43,12 @@ const GallerySection: React.FC = () => {
     <section className="py-12 bg-gray-50">
       <div className="container mx-auto">
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-secondary mb-4">معرض الصور</h2>
+          <h2 className="text-3xl font-bold text-secondary mb-4">
+            {" "}
+            {t("photoGallery")}{" "}
+          </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            لحظات مميزة من أنشطة وفعاليات النادي المختلفة
+            {t("photoDescription")}{" "}
           </p>
         </div>
 
@@ -51,13 +56,16 @@ const GallerySection: React.FC = () => {
 
         {loading ? (
           <div className="flex justify-center items-center h-48">
-            <LoadingSpinner/>
+            <LoadingSpinner />
           </div>
         ) : (
           <>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {displayedPics.map((image) => (
-                <div key={image.id} className="overflow-hidden rounded-lg h-48 md:h-64 group relative cursor-pointer">
+                <div
+                  key={image.id}
+                  className="overflow-hidden rounded-lg h-48 md:h-64 group relative cursor-pointer"
+                >
                   <img
                     src={`data:image/${image.imageExtension};base64,${image.img}`}
                     alt={image.alt}
@@ -73,8 +81,11 @@ const GallerySection: React.FC = () => {
             </div>
 
             <div className="text-center mt-8">
-              <Button className="bg-primary hover:bg-primary-dark text-white" onClick={() => navigate("/gallery")}>
-                المزيد من الصور
+              <Button
+                className="bg-primary hover:bg-primary-dark text-white"
+                onClick={() => navigate("/gallery")}
+              >
+                {t("morePhotos")}{" "}
               </Button>
             </div>
           </>

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import axiosInstance from "./../axiosConfig/instance";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const ActivityIcon = () => (
   <div className="text-primary mx-auto">
@@ -13,7 +14,10 @@ const ActivityIcon = () => (
       stroke="currentColor"
     >
       <circle cx="12" cy="12" r="9" strokeWidth="2" />
-      <path strokeWidth="2" d="M12 7 9 9.5l.5 4L12 17l2.5-3.5.5-4L12 7zm0 0v6" />
+      <path
+        strokeWidth="2"
+        d="M12 7 9 9.5l.5 4L12 17l2.5-3.5.5-4L12 7zm0 0v6"
+      />
     </svg>
   </div>
 );
@@ -21,6 +25,7 @@ const ActivityIcon = () => (
 const CARD_WIDTH = 200;
 
 const ActivitiesSection = () => {
+  const { i18n, t } = useTranslation();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [ActivityTypes, setActivityTypes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,23 +51,35 @@ const ActivitiesSection = () => {
       scrollRef.current.scrollBy({ left: amount, behavior: "smooth" });
     }
   };
-   const handleCardClick = (activity: any) => {
-    navigate("/games-by-type", { state: { games: activity.games, typeName: activity.name } });
+  const handleCardClick = (activity: any) => {
+    navigate("/games-by-type", {
+      state: { games: activity.games, typeName: activity.name },
+    });
   };
 
   return (
-    <section className="py-16 bg-white">
+    <section
+      className="py-16 bg-white"
+      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+    >
       <div className="container mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-secondary mb-4">الأنشطة الرياضية</h2>
+          <h2 className="text-3xl font-bold text-secondary mb-4">
+          {t("sportsActivities")}
+          </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            يقدم النادي مجموعة متنوعة من الأنشطة الرياضية للجميع، من المبتدئين إلى
-            المحترفين، وبإشراف مدربين متخصصين ذوي خبرة عالية.
+           {t("activitiesDescription")}
           </p>
         </div>
 
         <div className="flex items-center justify-center gap-4 mb-10">
-          <Button onClick={() => scrollByAmount(CARD_WIDTH)}>▶</Button>
+          <Button
+            onClick={() =>
+              scrollByAmount(i18n.language === "ar" ? -CARD_WIDTH : CARD_WIDTH)
+            }
+          >
+            {i18n.language === "ar" ?  "▶": "◀" }
+          </Button>
 
           <div
             ref={scrollRef}
@@ -80,18 +97,24 @@ const ActivitiesSection = () => {
               : ActivityTypes.map((activity, idx) => (
                   <div
                     key={idx}
-                    onClick={()=>handleCardClick(activity)}
+                    onClick={() => handleCardClick(activity)}
                     className="bg-gray-50 rounded-lg p-4 text-center flex-shrink-0 cursor-pointer hover:shadow-lg transition"
                     style={{ width: CARD_WIDTH - 12 }}
                   >
                     <ActivityIcon />
-                    <h3 className="mt-3 font-semibold text-secondary">{activity.name}</h3>
+                    <h3 className="mt-3 font-semibold text-secondary">
+                      {activity.name}
+                    </h3>
                   </div>
                 ))}
           </div>
-
-          <Button onClick={() => scrollByAmount(-CARD_WIDTH)}>◀</Button>
-
+          <Button
+            onClick={() =>
+              scrollByAmount(i18n.language === "ar" ? CARD_WIDTH : -CARD_WIDTH)
+            }
+          >
+            {i18n.language === "ar" ?  "◀" :"▶" }
+          </Button>
         </div>
       </div>
 

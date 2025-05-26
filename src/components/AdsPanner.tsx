@@ -14,7 +14,7 @@ export default function AdsPanner() {
         "AdvertisingImage/GetAdvertisingImage"
       );
       setAdvertisingImage(response.data.data);
-      console.log(response.data.data);
+      // console.log(response.data.data);
     } catch (error) {
       console.error("Error fetching images", error);
     }
@@ -29,7 +29,7 @@ export default function AdsPanner() {
         <img
           src={advertisingImage[0]?.image}
           alt={"advertisingImage"}
-          className="w-full h-auto max-h-60 object-cover rounded-xl shadow-lg"
+          className="w-full h-auto max-h-40 object-cover rounded-xl shadow-lg"
         />
       </div>
     </div>

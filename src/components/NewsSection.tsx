@@ -21,7 +21,7 @@ const NewsSection = () => {
   const totalPages = Math.ceil(newsItems.length / itemsPerPage);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const { t,i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const visibleNews = newsItems.slice(
     activePage * itemsPerPage,
@@ -41,7 +41,9 @@ const NewsSection = () => {
       setLoading(true);
       const langParam = i18n.language === "en" ? "en" : "";
 
-      const res = await axiosInstance.get(`ImageContents/GetAll?language=${langParam}`);
+      const res = await axiosInstance.get(
+        `ImageContents/GetAll?language=${langParam}`
+      );
       setNewsItems(res.data.data);
     } catch (err) {
       console.log(err);
@@ -62,27 +64,30 @@ const NewsSection = () => {
 
   useEffect(() => {
     getNews();
-  }, []);
+  }, [i18n.language]);
 
   if (loading) return <LoadingSpinner />;
 
   return (
-    <section className="py-12 bg-gray-50">
+    <section
+      className="py-12 bg-gray-50"
+      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+    >
       <div className="container mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-bold text-secondary relative">
-            أحدث الأخبار
+            {t("latestNews")}
             <span className="absolute bottom-0 right-0 w-1/3 h-1 bg-primary mt-2"></span>
           </h2>
 
-          <div className="flex space-x-2 space-x-reverse">
+          <div  className={`flex space-x-2 ${i18n.language === "ar" ? "space-x-reverse" : ""}`}>
             <Button
               variant="outline"
               size="icon"
               onClick={goToPrevPage}
               className="border-secondary text-secondary hover:bg-secondary hover:text-white"
             >
-              <ChevronRight className="h-5 w-5" />
+              {i18n.language === "ar" ? <ChevronRight /> : <ChevronLeft />}
             </Button>
             <Button
               variant="outline"
@@ -90,7 +95,7 @@ const NewsSection = () => {
               onClick={goToNextPage}
               className="border-secondary text-secondary hover:bg-secondary hover:text-white"
             >
-              <ChevronLeft className="h-5 w-5" />
+              {i18n.language === "ar" ? <ChevronLeft /> : <ChevronRight />}{" "}
             </Button>
           </div>
         </div>
@@ -123,7 +128,7 @@ const NewsSection = () => {
                   className="text-primary p-0 hover:text-primary-dark"
                   onClick={() => handleReadMore(news.id)}
                 >
-                  قراءة المزيد
+                  {t("readMore")}
                 </Button>
               </CardFooter>
             </Card>
@@ -135,7 +140,7 @@ const NewsSection = () => {
             className="bg-primary hover:bg-primary-dark text-white"
             onClick={() => navigate("/news")}
           >
-            عرض كل الأخبار
+            {t("viewAllNews")}
           </Button>
         </div>
       </div>
