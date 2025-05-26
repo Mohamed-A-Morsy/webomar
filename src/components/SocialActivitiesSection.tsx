@@ -24,16 +24,16 @@ const ActivityIcon = () => (
 
 const CARD_WIDTH = 200;
 
-const ActivitiesSection = () => {
-  const { i18n, t } = useTranslation();
+const SocialActivitiesSection = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { t, i18n } = useTranslation();
   const [ActivityTypes, setActivityTypes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const getActivityTypes = async () => {
     try {
-      const res = await axiosInstance.get("GameType/GetAll");
+      const res = await axiosInstance.get("ActivityType/GetAll");
       setActivityTypes(res.data.data);
     } catch (error) {
       console.log(error);
@@ -52,34 +52,26 @@ const ActivitiesSection = () => {
     }
   };
   const handleCardClick = (activity: any) => {
-    navigate("/games-by-type", {
+    navigate("/activities-by-type", {
       state: { games: activity.games, typeName: activity.name },
     });
   };
 
   return (
-    <section
-      className="py-16 bg-white"
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}
-    >
+    <section className="py-16 bg-gray-50 my-3">
       <div className="container mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-secondary mb-4">
-          {t("sportsActivities")}
+            {t("socialActivities")}
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-           {t("activitiesDescription")}
+            {" "}
+            {t("socialDescription")}
           </p>
         </div>
 
         <div className="flex items-center justify-center gap-4 mb-10">
-          <Button
-            onClick={() =>
-              scrollByAmount(i18n.language === "ar" ? -CARD_WIDTH : CARD_WIDTH)
-            }
-          >
-            {i18n.language === "ar" ?  "▶": "◀" }
-          </Button>
+          <Button onClick={() => scrollByAmount(CARD_WIDTH)}>▶</Button>
 
           <div
             ref={scrollRef}
@@ -108,13 +100,8 @@ const ActivitiesSection = () => {
                   </div>
                 ))}
           </div>
-          <Button
-            onClick={() =>
-              scrollByAmount(i18n.language === "ar" ? CARD_WIDTH : -CARD_WIDTH)
-            }
-          >
-            {i18n.language === "ar" ?  "◀" :"▶" }
-          </Button>
+
+          <Button onClick={() => scrollByAmount(-CARD_WIDTH)}>◀</Button>
         </div>
       </div>
 
@@ -131,4 +118,4 @@ const ActivitiesSection = () => {
   );
 };
 
-export default ActivitiesSection;
+export default SocialActivitiesSection;
