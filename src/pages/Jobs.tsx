@@ -114,8 +114,10 @@ const Jobs = () => {
                     );
                 })}
             </div>
-            <Pagination>
-                    <PaginationNext onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} />
+            <Pagination className='mb-11'>
+              {i18n.language === "ar" ? 
+                    <PaginationNext onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} /> : 
+                <PaginationPrevious onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} /> }
                 <PaginationContent dir='ltr'>
                     {Array.from({ length: totalPages }, (_, index) => (
                         <PaginationItem key={index + 1}>
@@ -128,7 +130,10 @@ const Jobs = () => {
                         </PaginationItem>
                     ))}
                 </PaginationContent>
-                <PaginationPrevious onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} /> 
+                {i18n.language === "ar" ?
+                <PaginationPrevious onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} />  : 
+                 <PaginationNext onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} />
+                 }
                 </Pagination>
             <style>{`
                 .perspective {
