@@ -72,6 +72,9 @@ const Header = () => {
             <Button asChild variant="ghost">
               <Link to="/shops">{t("shops")}</Link>
             </Button>
+            <Button asChild variant="ghost">
+              <Link to="/jobs">{t("Jobs")}</Link>
+            </Button>
           </nav>
           <div className="flex items-center space-x-2 space-x-reverse md:space-x-0">
             <Button variant="outline" size="sm" onClick={toggleLanguage}>

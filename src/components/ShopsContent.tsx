@@ -57,18 +57,37 @@ const ShopsContent: React.FC = () => {
   }, [langDir]);
 
 
-  const truncateText = (text: string | null, maxLength: number): string => {
-    if (!text) {
-      return "";
+  // const truncateText = (text: string | null, maxLength: number): string => {
+  //   if (!text) {
+  //     return "";
+  //   }
+  //   if (text.length <= maxLength) {
+  //     return text;
+  //   }
+  //   return text.substring(0, maxLength) + "...";
+  // };
+
+    
+
+    const truncateText = (htmlContent, maxLength) => {
+    const defaultText = "No description available";
+    if (!htmlContent) {
+      return defaultText;
     }
-    if (text.length <= maxLength) {
-      return text;
+    // Create a temporary DOM element to parse the HTML content
+    const tempElement = document.createElement("div");
+    tempElement.innerHTML = htmlContent;
+    const plainText =
+      tempElement.textContent || tempElement.innerText || defaultText;
+
+    if (plainText.length <= maxLength) {
+      return plainText;
     }
-    return text.substring(0, maxLength) + "...";
+
+    return plainText.substring(0, maxLength) + "...";
   };
 
-    if (loading) return <LoadingSpinner />;
-
+     if (loading) return <LoadingSpinner />;
 
   return (
     <>
@@ -88,9 +107,9 @@ const ShopsContent: React.FC = () => {
           shops.map((item) => (
           item.archive === false && (
             <Card
-                             key={item.id}
-                             className="news-card overflow-hidden border border-gray-200"
-                        >
+                key={item.id}
+                className="news-card overflow-hidden border border-gray-200"
+              >
                              <div className="h-48 overflow-hidden">
                                 {
                                     item?.image ? 
@@ -117,7 +136,7 @@ const ShopsContent: React.FC = () => {
                              </CardDescription>
                              </CardHeader>
                             <CardContent>
-                             <p>{item?.details}</p>
+                             <p>{truncateText(item?.details, 40)}</p>
                             </CardContent>
                                       <CardFooter>
                                         <Button

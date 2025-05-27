@@ -22,6 +22,7 @@ import Game from "./pages/Game";
 import SocialActivitiesSection from "./components/SocialActivitiesSection";
 import SocialActivities from "./pages/SocialActivities";
 import ChairMan from "./pages/ChairMan";
+import Jobs from "./pages/Jobs";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/games-by-type" element={<Game />} />
           <Route path="/activities-by-type" element={<SocialActivities />} />
           <Route path="/chairman" element={<ChairMan />} />
+          <Route path="/jobs" element={<Jobs />} />
 
 
           
