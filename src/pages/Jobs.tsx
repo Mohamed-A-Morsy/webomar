@@ -32,7 +32,7 @@ const Jobs = () => {
             setLoading(true);
             const langParam = i18n.language === "en" ? "en" : "";
             const response = await axiosInstance.get(`/Job/GetAll?language=${langParam}`);
-            setJObs(response.data.data);
+            setJObs(response.data.data.result);
             console.log(response.data.data);
         } catch (error) {
             console.log(error);
@@ -61,12 +61,14 @@ const Jobs = () => {
         getJobs();
     }, [i18n.language]);
 
-    if (loading) return <LoadingSpinner />;
+    console.log('jobs' , jobs)
 
+    if (loading) return <LoadingSpinner />;
     // Calculate the current jobs to display
     const indexOfLastJob = currentPage * jobsPerPage;
     const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-    const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
+    const currentJobs = jobs?.slice(indexOfFirstJob, indexOfLastJob);
+    
 
     // Calculate total pages
     const totalPages = Math.ceil(jobs.length / jobsPerPage);

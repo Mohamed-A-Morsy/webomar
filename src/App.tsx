@@ -47,6 +47,7 @@ function App() {
           <Route path="/activities-by-type" element={<SocialActivities />} />
           <Route path="/chairman" element={<ChairMan />} />
           <Route path="/jobs" element={<Jobs />} />
+          <Route path="/videos" element={<Videos />} />
 
 
           
