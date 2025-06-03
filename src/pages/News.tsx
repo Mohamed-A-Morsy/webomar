@@ -17,32 +17,37 @@ const News = () => {
   const [newsItems, setNewsItems] = useState([]);
   const [activePage, setActivePage] = useState(0);
   const itemsPerPage = 4;
-  const totalPages = Math.ceil(newsItems.length / itemsPerPage);
+  const [visibleNews, setVisibleNews] = useState([]);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const { t } = useTranslation();
   const { i18n } = useTranslation();
-
-  const visibleNews = newsItems.slice(
-    activePage * itemsPerPage,
-    activePage * itemsPerPage + itemsPerPage
-  );
 
   const getNews = async () => {
     try {
       setLoading(true);
       const langParam = i18n.language === "en" ? "en" : "";
-
-      const res = await axiosInstance.get(
-        `ImageContents/GetAll?language=${langParam}`
-      );
-      setNewsItems(res.data.data);
+      const res = await axiosInstance.get(`ImageContents/GetAll?language=${langParam}`);
+      setNewsItems(res.data.data.result); // Ensure you're setting the correct data structure
     } catch (err) {
       console.log(err);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    getNews();
+  }, [i18n.language]);
+
+  useEffect(() => {
+    if (newsItems.length > 0) {
+      setVisibleNews(
+        newsItems.slice(activePage * itemsPerPage, activePage * itemsPerPage + itemsPerPage)
+      );
+    }
+  }, [newsItems, activePage]);
+
+  const totalPages = Math.ceil(newsItems.length / itemsPerPage);
 
   const goToNextPage = () => {
     setActivePage((prev) => (prev + 1) % totalPages);
@@ -52,9 +57,6 @@ const News = () => {
     setActivePage((prev) => (prev === 0 ? totalPages - 1 : prev - 1));
   };
 
-  useEffect(() => {
-    getNews();
-  }, [i18n.language]);
   if (loading) return <LoadingSpinner />;
 
   return (
@@ -88,7 +90,7 @@ const News = () => {
                   onClick={goToPrevPage}
                   className="border-secondary text-secondary hover:bg-secondary hover:text-white"
                 >
-                  <ChevronRight className="h-5 w-5" />
+                  <ChevronLeft className="h-5 w-5" />
                 </Button>
                 <Button
                   variant="outline"
@@ -96,7 +98,7 @@ const News = () => {
                   onClick={goToNextPage}
                   className="border-secondary text-secondary hover:bg-secondary hover:text-white"
                 >
-                  <ChevronLeft className="h-5 w-5" />
+                  <ChevronRight className="h-5 w-5" />
                 </Button>
               </div>
             </div>
