@@ -26,17 +26,39 @@ const Videos: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const getCategories = async () => {
+    try {
+      setLoading(true);
+      const langParam = i18n.language === "en" ? "en" : "";
+      const response = await axiosInstance.get(`VideoCategory/GetAll?language=${langParam}`);
+      setCategories(response.data.data);
+
+      // Set the selectedCategory to the ID of the first category if available
+      if (response.data.data.length > 0) {
+        setSelectedCategory(response.data.data[0].id);
+      }
+    } catch (error) {
+      console.error("Error fetching categories", error);
+      setError("حدث خطأ أثناء تحميل فئات الفديوهات.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getCategories();
+  }, [i18n.language]);
+
   useEffect(() => {
     const fetchVideosAndCategories = async () => {
+      if (selectedCategory === null) return; // Prevent fetching if no category is selected
+
       try {
         setLoading(true);
         const langParam = i18n.language === "en" ? "en" : "";
-        const response = await axiosInstance.get(`/VideoCategory/GetAllWithVideos?language=${langParam}`);
+        const response = await axiosInstance.get(`/Video/GetVideosByCategory/${selectedCategory}?language=${langParam}`);
         
-        // Flatten videos and categories as before
-        setVideos(response.data.data.flatMap((category: any) => category.videos));
-        setCategories(response.data.data.map((category: any) => ({ id: category.id, name: category.name })));
-        setSelectedCategory(response.data.data[0]?.id || null);
+        setVideos(response.data.data);
       } catch (error) {
         console.error("Error fetching videos", error);
         setError("حدث خطأ أثناء تحميل الفيديوهات.");
@@ -45,9 +67,7 @@ const Videos: React.FC = () => {
       }
     };
     fetchVideosAndCategories();
-  }, [i18n.language]);
-
-  const filteredVideos = selectedCategory ? videos.filter(video => video.videoCategoryId === selectedCategory) : videos;
+  }, [i18n.language, selectedCategory]);
 
   return (
     <section className="py-12 bg-gray-50" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
@@ -80,8 +100,7 @@ const Videos: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {filteredVideos.map(video => {
-                // create video src URL from base64 data
+              {videos.map(video => {
                 const videoSrc = `data:video/mp4;base64,${video.data}`;
                 return (
                   <div
@@ -96,8 +115,7 @@ const Videos: React.FC = () => {
                       muted
                       playsInline
                       src={videoSrc}
-                      >
-                      {/* <source src={videoSrc} type="video/mp4" /> */}
+                    >
                       Your browser does not support the video tag.
                     </video>
                   </div>
@@ -112,4 +130,3 @@ const Videos: React.FC = () => {
 };
 
 export default Videos;
-
