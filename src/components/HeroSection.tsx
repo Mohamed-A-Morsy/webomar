@@ -10,21 +10,26 @@ export default function HeroSection() {
   const [newsItems, setNewsItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const { t, i18n } = useTranslation();
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
 
   const getNews = async () => {
     try {
       setLoading(true);
       const langParam = i18n.language === "en" ? "en" : "";
       const res = await axiosInstance.get(
-        `ImageContents/GetAll?language=${langParam}`
+        `ImageContents/GetAll?PageNumber=${currentPage}&PageSize=${pageSize}&language=${langParam}`
       );
-      setNewsItems(res.data.data);
+      setNewsItems(res.data.data.result);
     } catch (err) {
       console.log(err);
     } finally {
       setLoading(false);
     }
   };
+
+console.log(newsItems)
 
   useEffect(() => {
     getNews();

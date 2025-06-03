@@ -15,11 +15,14 @@ interface Video {
 
 const VideoSection: React.FC = () => {
   const { t, i18n } = useTranslation();
+  const [alldesplayVideos , setAllDesplayVideos] = useState([])
   const [videos, setVideos] = useState<Video[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
-
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
   const opts = {
     height: "255",
     width: "100%",
@@ -37,8 +40,10 @@ const VideoSection: React.FC = () => {
     const fetchPics = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance.get("/Video/GetAll");
+        const response = await axiosInstance.get(`/Video/GetAll?PageNumber=${currentPage}&PageSize=${pageSize}`);
         setVideos(response.data.data);
+        setAllDesplayVideos(response.data.data.result)
+        setTotalCount(response.data.data.totalCount);
       } catch (error) {
         console.error("Error fetching videos", error);
         setError("حدث خطأ أثناء تحميل الفيديوهات.");
@@ -48,6 +53,8 @@ const VideoSection: React.FC = () => {
     };
     fetchPics();
   }, []);
+
+  console.log(videos)
 
   const getVideoIdFromUrl = (url: string): string | null => {
     const fullUrlMatch = url.match(/[?&]v=([^?&]+)/);
@@ -67,7 +74,7 @@ const VideoSection: React.FC = () => {
     return null;
   };
 
-  const displayedVideo = videos.slice(0, 4);
+  const displayedVideo = alldesplayVideos.slice(0, 4);
 
   return (
     <section className="py-12 bg-gray-50"  dir={i18n.language === "ar" ? "rtl" : "ltr"}>
@@ -89,7 +96,7 @@ const VideoSection: React.FC = () => {
         ) : (
           <>
            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {displayedVideo.map((video) => {
                 const videoId = getVideoIdFromUrl(video.url);
                 const watchUrl = getYoutubeWatchUrl(video.url);
@@ -108,6 +115,7 @@ const VideoSection: React.FC = () => {
                       if (e.key === 'Enter') window.open(watchUrl, "_blank", "noopener noreferrer");
                     }}
                   >
+                    
                     <YouTube
                       videoId={videoId}
                       opts={opts}
@@ -122,7 +130,34 @@ const VideoSection: React.FC = () => {
                   </div>
                 );
               })}
+            </div> */}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {displayedVideo.map(video => {
+                // create video src URL from base64 data
+                const videoSrc = `data:video/mp4;base64,${video.data}`;
+                return (
+                  <div
+                    key={video.id}
+                    className="overflow-hidden rounded-lg h-48 md:h-64 relative group cursor-pointer bg-black"
+                    title={video.name}
+                  >
+                    <video
+                      className="w-full h-full object-cover"
+                      controls
+                      preload="metadata"
+                      muted
+                      playsInline
+                      src={videoSrc}
+                      >
+                      {/* <source src={videoSrc} type="video/mp4" /> */}
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                );
+              })}
             </div>
+
 
             <div className="text-center mt-8">
               <Button

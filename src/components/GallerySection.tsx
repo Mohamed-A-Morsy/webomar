@@ -19,14 +19,16 @@ const GallerySection: React.FC = () => {
   const [pics, setPics] = useState<Picture[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
+  const navigate = useNavigate();const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
 
   useEffect(() => {
     const fetchPics = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance.get("/Image/GetAll");
-        setPics(response.data.data);
+        const response = await axiosInstance.get(`/Image/GetAll?PageNumber=${currentPage}&PageSize=${pageSize}`);
+        setPics(response.data.data.image);
       } catch (error) {
         console.error("Error fetching images", error);
         setError("حدث خطأ أثناء تحميل الصور.");
@@ -36,6 +38,8 @@ const GallerySection: React.FC = () => {
     };
     fetchPics();
   }, []);
+
+  console.log(pics)
 
   const displayedPics = pics.slice(0, 4);
 

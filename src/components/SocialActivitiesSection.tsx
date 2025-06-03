@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import axiosInstance from "./../axiosConfig/instance";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
 const ActivityIcon = () => (
   <div className="text-primary mx-auto">
@@ -30,11 +31,15 @@ const SocialActivitiesSection = () => {
   const [ActivityTypes, setActivityTypes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 6;
 
-  const getActivityTypes = async () => {
+  const getActivityTypes = async (page: number, size: number) => {
     try {
-      const res = await axiosInstance.get("ActivityType/GetAll");
-      setActivityTypes(res.data.data);
+      const res = await axiosInstance.get(`ActivityType/GetAll?PageNumber=${page}&PageSize=${size}`);
+      setActivityTypes(res.data.data.result);
+      setTotalCount(res.data.data.totalCount);
     } catch (error) {
       console.log(error);
     } finally {
@@ -43,19 +48,17 @@ const SocialActivitiesSection = () => {
   };
 
   useEffect(() => {
-    getActivityTypes();
-  }, []);
+    getActivityTypes(currentPage, pageSize);
+  }, [currentPage]);
 
-  const scrollByAmount = (amount: number) => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: amount, behavior: "smooth" });
-    }
-  };
   const handleCardClick = (activity: any) => {
     navigate("/activities-by-type", {
       state: { games: activity.games, typeName: activity.name },
     });
   };
+
+  // Calculate total pages
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
     <section className="py-16 bg-gray-50 my-3">
@@ -65,13 +68,12 @@ const SocialActivitiesSection = () => {
             {t("socialActivities")}
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            {" "}
             {t("socialDescription")}
           </p>
         </div>
 
         <div className="flex items-center justify-center gap-4 mb-10">
-          <Button onClick={() => scrollByAmount(CARD_WIDTH)}>▶</Button>
+          <Button onClick={() => scrollRef.current?.scrollBy({ left: CARD_WIDTH, behavior: "smooth" })}>▶</Button>
 
           <div
             ref={scrollRef}
@@ -101,8 +103,32 @@ const SocialActivitiesSection = () => {
                 ))}
           </div>
 
-          <Button onClick={() => scrollByAmount(-CARD_WIDTH)}>◀</Button>
+          <Button onClick={() => scrollRef.current?.scrollBy({ left: -CARD_WIDTH, behavior: "smooth" })}>◀</Button>
         </div>
+
+        <Pagination className='mb-11'>
+           {i18n.language === "ar" ? 
+                  <PaginationNext onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} className="pagination-button"  /> : 
+                  <PaginationPrevious onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} className="pagination-button"  /> }
+          <PaginationContent dir='ltr'>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <PaginationItem key={index + 1}>
+                <PaginationLink
+                  isActive={currentPage === index + 1}
+                  onClick={() => setCurrentPage(index + 1)}
+                  className="pagination-count"
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+          </PaginationContent>
+          {i18n.language === "ar" ?
+              <PaginationPrevious onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} className="pagination-button"  />  : 
+              <PaginationNext onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} className="pagination-button" />
+                                 }
+        </Pagination>
+
       </div>
 
       <style>{`
@@ -112,6 +138,24 @@ const SocialActivitiesSection = () => {
         .no-scrollbar {
           -ms-overflow-style: none;
           scrollbar-width: none;
+        }
+        .pagination-button {
+          background-color: white; /* Default background color */
+          color: green; /* Text color */
+          transition: background-color 0.3s; /* Smooth transition */
+        }
+        .pagination-button:hover {
+          background-color: #2c9a4f; /* Background color on hover */
+          color: white;
+        }
+        .pagination-count {
+          background-color: white; /* Default background color */
+          color: green; /* Text color */
+          transition: background-color 0.3s; /* Smooth transition */
+        }
+        .pagination-count:hover {
+          background-color: #2c9a4f; /* Background color on hover */
+          color: white;
         }
       `}</style>
     </section>

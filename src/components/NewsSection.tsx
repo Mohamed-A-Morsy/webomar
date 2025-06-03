@@ -22,8 +22,10 @@ const NewsSection = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-
-  const visibleNews = newsItems.slice(
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
+  const visibleNews = newsItems?.slice(
     activePage * itemsPerPage,
     activePage * itemsPerPage + itemsPerPage
   );
@@ -42,15 +44,16 @@ const NewsSection = () => {
       const langParam = i18n.language === "en" ? "en" : "";
 
       const res = await axiosInstance.get(
-        `ImageContents/GetAll?language=${langParam}`
+        `ImageContents/GetAll?PageNumber=${currentPage}&PageSize=${pageSize}&language=${langParam}`
       );
-      setNewsItems(res.data.data);
+      setNewsItems(res.data.data.result);
     } catch (err) {
       console.log(err);
     } finally {
       setLoading(false);
     }
   };
+console.log(newsItems)
 
   const truncateText = (text, wordLimit = 25) => {
     const words = text?.split(" ");
