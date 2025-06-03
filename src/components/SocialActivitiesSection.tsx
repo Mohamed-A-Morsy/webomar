@@ -33,7 +33,7 @@ const SocialActivitiesSection = () => {
   const navigate = useNavigate();
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 6;
+  const pageSize = 7;
 
   const getActivityTypes = async (page: number, size: number) => {
     try {

@@ -36,7 +36,7 @@ const ActivitiesSection = () => {
   const [allActivityies , setAllActivities] = useState([])
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 3;
+  const pageSize = 7;
 
   const getActivityTypes = async (page, size) => {
     try {
