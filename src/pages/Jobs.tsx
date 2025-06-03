@@ -13,27 +13,26 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { useTranslation } from 'react-i18next';
 
 const Jobs = () => {
-    const [jobs, setJObs] = useState([]);
+    const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
     const { t } = useTranslation();
     const { i18n } = useTranslation();
     const [flippedCardId, setFlippedCardId] = useState<number | null>(null);
-    
-    // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
-    const jobsPerPage = 3; // Number of jobs to display per page
+    const pageSize = 3; 
+    const [totalCount, setTotalCount] = useState(0);
 
     const handleFlip = (id: number) => {
         setFlippedCardId((prev) => (prev === id ? null : id));
     };
 
-    const getJobs = async () => {
+    const getJobs = async (page: number, size: number) => {
         try {
             setLoading(true);
             const langParam = i18n.language === "en" ? "en" : "";
-            const response = await axiosInstance.get(`/Job/GetAll?language=${langParam}`);
-            setJObs(response.data.data.result);
-            console.log(response.data.data);
+            const response = await axiosInstance.get(`/Job/GetAll?language=${langParam}&PageNumber=${page}&PageSize=${size}`);
+            setJobs(response.data.data.result);
+            setTotalCount(response.data.data.totalCount); 
         } catch (error) {
             console.log(error);
         } finally {
@@ -41,7 +40,12 @@ const Jobs = () => {
         }
     };
 
-    const truncateText = (htmlContent, maxLength) => {
+
+    useEffect(() => {
+        getJobs(currentPage, pageSize);
+    }, [currentPage, i18n.language]);
+
+        const truncateText = (htmlContent, maxLength) => {
         const defaultText = "No description available";
         if (!htmlContent) {
             return defaultText;
@@ -57,27 +61,16 @@ const Jobs = () => {
         return plainText.substring(0, maxLength) + "...";
     };
 
-    useEffect(() => {
-        getJobs();
-    }, [i18n.language]);
-
-    console.log('jobs' , jobs)
-
     if (loading) return <LoadingSpinner />;
-    // Calculate the current jobs to display
-    const indexOfLastJob = currentPage * jobsPerPage;
-    const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-    const currentJobs = jobs?.slice(indexOfFirstJob, indexOfLastJob);
-    
 
     // Calculate total pages
-    const totalPages = Math.ceil(jobs.length / jobsPerPage);
+    const totalPages = Math.ceil(totalCount / pageSize);
 
     return (
         <div dir={i18n.language === "ar" ? "rtl" : "ltr"}>
             <h1 className="text-4xl text-center mb-11 font-semibold mt-11">{t("Jobs")}</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-                {currentJobs.map((job) => {
+                {jobs.map((job) => {
                     const isFlipped = flippedCardId === job.id;
                     return (
                         <Card
@@ -117,9 +110,9 @@ const Jobs = () => {
                 })}
             </div>
             <Pagination className='mb-11'>
-              {i18n.language === "ar" ? 
+                {i18n.language === "ar" ? 
                     <PaginationNext onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} /> : 
-                <PaginationPrevious onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} /> }
+                    <PaginationPrevious onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} /> }
                 <PaginationContent dir='ltr'>
                     {Array.from({ length: totalPages }, (_, index) => (
                         <PaginationItem key={index + 1}>
@@ -133,10 +126,10 @@ const Jobs = () => {
                     ))}
                 </PaginationContent>
                 {i18n.language === "ar" ?
-                <PaginationPrevious onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} />  : 
-                 <PaginationNext onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} />
-                 }
-                </Pagination>
+                    <PaginationPrevious onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} />  : 
+                    <PaginationNext onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} />
+                }
+            </Pagination>
             <style>{`
                 .perspective {
                     perspective: 1200px;
