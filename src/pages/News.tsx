@@ -90,7 +90,8 @@ const News = () => {
                   onClick={goToPrevPage}
                   className="border-secondary text-secondary hover:bg-secondary hover:text-white"
                 >
-                  <ChevronLeft className="h-5 w-5" />
+                                    <ChevronRight className="h-5 w-5" />
+
                 </Button>
                 <Button
                   variant="outline"
@@ -98,7 +99,8 @@ const News = () => {
                   onClick={goToNextPage}
                   className="border-secondary text-secondary hover:bg-secondary hover:text-white"
                 >
-                  <ChevronRight className="h-5 w-5" />
+                  <ChevronLeft className="h-5 w-5" />
+
                 </Button>
               </div>
             </div>
