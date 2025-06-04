@@ -16,10 +16,11 @@ const EventCalendarSection = () => {
     const lang = i18n.language === "ar" ? "" : "en";
     axiosInstance
       .get(`/Event/GetAll?language=${lang}`)
-      .then((res) => setEvents(res.data.data))
+      .then((res) => setEvents(res.data.data.events))
       .catch((err) => console.error(err));
   }, [i18n.language]);
 
+  console.log(events)
   useEffect(() => {
     const selectedEvent = events.find(
       (event) => event.startDate === format(selectedDate, "yyyy-MM-dd")

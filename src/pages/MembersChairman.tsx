@@ -10,6 +10,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +30,10 @@ const MembersChairman = () => {
     const [loading, setLoading] = useState(true);
     const { t } = useTranslation();
     const { i18n } = useTranslation();
-      const [flippedCardId, setFlippedCardId] = useState<number | null>(null);
+    const [flippedCardId, setFlippedCardId] = useState<number | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 3; 
+    const [totalCount, setTotalCount] = useState(0);
     
 
     const handleFlip = (id: number) => {
@@ -30,12 +41,13 @@ const MembersChairman = () => {
   };
     
 
-    const getMembers = async () => {
+    const getMembers = async (page , size) => {
     try {
        setLoading(true);
        const langParam = i18n.language === "en" ? "en" : "";
-      const response = await axiosInstance.get(`/StaffMember/GetAll?language=${langParam}`);
-      setMembers(response.data.data);
+      const response = await axiosInstance.get(`/StaffMember/GetAll?language=${langParam}&PageNumber=${page}&PageSize=${size}`);
+      setMembers(response.data.data.result);
+      setTotalCount(response.data.data.totalCount);
     } catch (error) {
       console.log(error);
     }finally {
@@ -64,10 +76,12 @@ const MembersChairman = () => {
   console.log(members)
 
     useEffect(() => {
-    getMembers();
-  }, [i18n.language]);
+    getMembers(currentPage , pageSize);
+  }, [i18n.language , currentPage]);
 
   if (loading) return <LoadingSpinner />;
+
+  const totalPages = Math.ceil(totalCount / pageSize)
   return (
     <div>
         <h1  className="text-4xl text-center mb-11 font-semibold">{t("BoardOfDirectors")} </h1>
@@ -117,6 +131,27 @@ const MembersChairman = () => {
           )
         })}
         </div>
+        <Pagination className='mb-11 mt-11'>
+                  {i18n.language === "ar" ? 
+                    <PaginationNext onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} /> : 
+                    <PaginationPrevious onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} /> }
+                  <PaginationContent dir='ltr'>
+                    {Array.from({ length: totalPages }, (_, index) => (
+                      <PaginationItem key={index + 1}>
+                        <PaginationLink
+                          isActive={currentPage === index + 1}
+                          onClick={() => setCurrentPage(index + 1)}
+                        >
+                          {index + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                  </PaginationContent>
+                  {i18n.language === "ar" ?
+                    <PaginationPrevious onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} />  : 
+                    <PaginationNext onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} />
+                  }
+                </Pagination>
          <style>{`
         .perspective {
           perspective: 1200px;

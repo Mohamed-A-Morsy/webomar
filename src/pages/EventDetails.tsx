@@ -27,6 +27,9 @@ const EventDetails: React.FC = () => {
       .finally(() => setLoading(false));
   }, [id, i18n.language]);
 
+  console.log(id)
+  console.log(event)
+  
   const sanitizeHtml = (html: string) => DOMPurify.sanitize(html);
   if (loading) return <LoadingSpinner />;
   return (

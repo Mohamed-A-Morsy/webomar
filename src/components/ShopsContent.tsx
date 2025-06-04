@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "@/axiosConfig/instance";
 import DOMPurify from "dompurify";
-import { ChevronLeft } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import LoadingSpinner from "./ui/loader";
 import {
@@ -12,8 +11,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Link } from "react-router-dom";
-import { Button } from '@/components/ui/button';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 interface Shop {
   id: number;
@@ -25,167 +30,180 @@ interface Shop {
 }
 
 const ShopsContent: React.FC = () => {
-     const { t } = useTranslation();
-      const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [shops, setShops] = useState<Shop[]>([]);
-  console.log(shops);
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 3; // Set your desired page size
+  const [totalCount, setTotalCount] = useState(0);
+  const [flippedCardId, setFlippedCardId] = useState<number | null>(null);
 
-  const langDir = typeof sessionStorage !== 'undefined' && sessionStorage.getItem('lang') === 'ar' ? '' : 'en';
-
-  const sanitizeHtml = (htmlContent: string) => {
-    return DOMPurify.sanitize(htmlContent);
+  const fetchCards = async (page: number, size: number) => {
+    try {
+      setLoading(true);
+      const langParam = i18n.language === "en" ? "en" : "";
+      const response = await axiosInstance.get(
+        `/Shop/GetAll?language=${langParam}&PageNumber=${page}&PageSize=${size}`
+      );
+      setShops(response.data.data.shops || []);
+      setTotalCount(response.data.data.totalCount); // Assuming your API returns totalCount
+    } catch (error) {
+      console.error("Error fetching shops", error);
+    } finally {
+      setLoading(false);
+    }
   };
-    const [loading, setLoading] = useState(false);
-  
-
-    const fetchCards = async () => {
-      try {
-        setLoading(true);
-        const langParam = i18n.language === "en" ? "en" : "";
-        const response = await axiosInstance.get(`/Shop/GetAll?language=${langParam}`);
-        console.log(response.data);
-        setShops(response.data.data);
-      } catch (error) {
-        console.error("Error fetching images", error);
-      }finally{
-        setLoading(false);
-      }
-    };
 
   useEffect(() => {
-    fetchCards();
-  }, [langDir]);
+    fetchCards(currentPage, pageSize);
+  }, [currentPage, i18n.language]);
 
+  if (loading) return <LoadingSpinner />;
 
-  // const truncateText = (text: string | null, maxLength: number): string => {
-  //   if (!text) {
-  //     return "";
-  //   }
-  //   if (text.length <= maxLength) {
-  //     return text;
-  //   }
-  //   return text.substring(0, maxLength) + "...";
-  // };
+  const totalPages = Math.ceil(totalCount / pageSize);
 
-    
+  const handleFlip = (id: number) => {
+    setFlippedCardId((prev) => (prev === id ? null : id));
+  };
 
-    const truncateText = (htmlContent, maxLength) => {
+  const truncateText = (htmlContent: string | null, maxLength: number) => {
     const defaultText = "No description available";
     if (!htmlContent) {
       return defaultText;
     }
-    // Create a temporary DOM element to parse the HTML content
     const tempElement = document.createElement("div");
     tempElement.innerHTML = htmlContent;
-    const plainText =
-      tempElement.textContent || tempElement.innerText || defaultText;
-
+    const plainText = tempElement.textContent || tempElement.innerText || defaultText;
     if (plainText.length <= maxLength) {
       return plainText;
     }
-
     return plainText.substring(0, maxLength) + "...";
   };
 
-     if (loading) return <LoadingSpinner />;
-
   return (
     <>
-    <div className="bg-secondary py-12">
-          <div className="container mx-auto px-4">
-            <h1 className="text-4xl font-bold text-white text-center mb-4">{t("InvestWisely")}</h1>
-            <p className="text-white text-center max-w-2xl mx-auto mb-4">
-                {t("YourInvestmentInCommercialStoreAtTheYouthDevelopmentCenterinAl-Jazirah")}
-            </p>
-            <p className="text-white text-center max-w-2xl mx-auto">{t("willachievewhatyouwant")}</p>
-          </div>
+      <div className="bg-secondary py-12">
+        <div className="container mx-auto px-4">
+          <h1 className="text-4xl font-bold text-white text-center mb-4">
+            {t("InvestWisely")}
+          </h1>
+          <p className="text-white text-center max-w-2xl mx-auto mb-4">
+            {t("YourInvestmentInCommercialStoreAtTheYouthDevelopmentCenterinAl-Jazirah")}
+          </p>
+          <p className="text-white text-center max-w-2xl mx-auto">
+            {t("willachievewhatyouwant")}
+          </p>
         </div>
-    <div id="sportContent" className="" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-      <div className="w-[85%] m-auto grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-6 gap-y-12 py-20">
-
-        {
-          shops.map((item) => (
-          item.archive === false && (
-            <Card
-                key={item.id}
-                className="news-card overflow-hidden border border-gray-200"
-              >
-                             <div className="h-48 overflow-hidden">
-                                {
-                                    item?.image ? 
-                                    <img
-                                     src={`data:image/jpeg;base64,${item.image}`}
-                                     alt={item.name}
-                                     className="w-full h-full object-covtransition-transform duration-500 hover:scale-110"
-                                    /> : 
-                                    <div className='flex  items-center justify-center h-48'>
-                                        <h1>
-
-                                        لا يوجد صورة
-                                        </h1>
-                                    </div>
-
-                                }
-                             </div>
-                             <CardHeader>
-                              <CardTitle className="text-xl"><h1>{item?.name}</h1></CardTitle>
-                              <CardDescription className="text-gray-500 text-l">
-                                <h1>
-                                {item?.productType}
-                                </h1>
-                             </CardDescription>
-                             </CardHeader>
-                            <CardContent>
-                             <p>{truncateText(item?.details, 40)}</p>
-                            </CardContent>
-                                      <CardFooter>
-                                        <Button
-                                          variant="link"
-                                          className="text-primary p-0 hover:text-primary-dark"
-                                          
-                                        >
-                                            <Link to="">
-                                        قراءة المزيد
-                                            </Link>
-                                        </Button>
-                                      </CardFooter>
-                                    </Card>
-          )
-        ))
-        }
-
-
-        {/* {shops.map((item) => (
-          item.archive === false && (
-            <div
-              className="rounded-md flex flex-col overflow-hidden"
-              style={{
-                boxShadow: "8px 8px 5px lightgray",
-                height: "400px" // Set the fixed height for the card
-              }}
-              key={item.id}
-            >
-              <div className="bg-secondary w-full h-[220px] ">
-                <img src={`data:image/jpeg;base64,${item.image}`} className="w-full h-full" alt="" width={450} height={450} />
-              </div>
-
-              <div className="px-4 py-6 flex-grow">
-                <div className="flex flex-row-reverse justify-between mb-4">
-                  <h3 className="font-bold text-xl text-white">{item.name}</h3>
-                  <span className="text-gray-400">{item.productType}</span>
-                </div>
-                <div className="text-right mb-4 text-text-black flex-grow overflow-auto">
-                  <div
-                    className="text-right text-black"
-                    dangerouslySetInnerHTML={{ __html: item.details ? sanitizeHtml(item.details) : "" }}
-                  />
-                </div>
-              </div>
-            </div>
-          )
-        ))} */}
       </div>
-    </div>
+      <div
+        id="sportContent"
+        className=""
+        dir={i18n.language === "ar" ? "rtl" : "ltr"}
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+          {shops.map((item) => {
+            const isFlipped = flippedCardId === item.id;
+            return (
+              <Card
+                key={item.id}
+                className={`relative w-full h-full transition-transform duration-700 transform-style-preserve-3d ${
+                  isFlipped ? "rotate-y-180" : ""
+                }`}
+                onClick={() => handleFlip(item.id)}
+              >
+                {/* Front Side */}
+                <div className="h-48 overflow-hidden">
+                  {item?.image ? (
+                    <img
+                      src={`data:image/jpeg;base64,${item.image}`}
+                      alt={item.name}
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center h-48">
+                      <h1>لا يوجد صورة</h1>
+                    </div>
+                  )}
+                </div>
+                <CardHeader>
+                  <CardTitle className="text-xl">{item.name}</CardTitle>
+                  <CardDescription className="text-gray-500 text-sm">
+                    {item.productType}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {truncateText(item.details, 40)}
+                </CardContent>
+                <CardFooter>
+                  {/* Optional footer content */}
+                </CardFooter>
+
+                {/* Back Side */}
+                <div className="absolute inset-0 backface-hidden rotate-y-180 bg-white border border-gray-200 rounded-lg shadow-md p-4 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-lg font-bold text-secondary mb-2 text-center">
+                      {truncateText(item.details, 1000)}
+                    </h3>
+                  </div>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
+
+        {/* Pagination */}
+        <Pagination className="mb-11 mt-11">
+          {i18n.language === "ar" ? (
+            <PaginationNext
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+            />
+          ) : (
+            <PaginationPrevious
+              onClick={() =>
+                setCurrentPage((prev) => Math.max(prev - 1, 1))
+              }
+            />
+          )}
+          <PaginationContent dir="ltr">
+            {Array.from({ length: totalPages }, (_, index) => (
+              <PaginationItem key={index + 1}>
+                <PaginationLink
+                  isActive={currentPage === index + 1}
+                  onClick={() => setCurrentPage(index + 1)}
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+          </PaginationContent>
+          {i18n.language === "ar" ? (
+            <PaginationPrevious
+              onClick={() =>
+                setCurrentPage((prev) => Math.max(prev - 1, 1))
+              }
+            />
+          ) : (
+            <PaginationNext
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+            />
+          )}
+        </Pagination>
+      </div>
+      <style>{`
+        .transform-style-preserve-3d {
+          transform-style: preserve-3d;
+        }
+        .backface-hidden {
+          backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+          transform: rotateY(180deg);
+        }
+      `}</style>
     </>
   );
 };

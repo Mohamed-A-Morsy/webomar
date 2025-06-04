@@ -22,7 +22,7 @@ const Gallery: React.FC = () => {
     const fetchPics = async () => {
       try {
         const response = await axiosInstance.get("Image/GetAll");
-        setPics(response.data.data);
+        setPics(response.data.data.image);
       } catch (error) {
         console.error("Error fetching images", error);
         setError("حدث خطأ أثناء تحميل الصور.");
@@ -32,6 +32,9 @@ const Gallery: React.FC = () => {
     };
     fetchPics();
   }, []);
+  
+
+  console.log(pics)
 
   const displayedPics = showAll ? pics : pics.slice(0, 8);
 

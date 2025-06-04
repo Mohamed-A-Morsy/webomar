@@ -1,18 +1,46 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "@/axiosConfig/instance";
 import { useTranslation } from "react-i18next";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import LoadingSpinner from "../ui/loader";
 
 const EventCardsSection = () => {
   const { t, i18n } = useTranslation();
   const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 2; 
+  const [totalCount, setTotalCount] = useState(0);
 
+  const getUpcomingEvents = async (page, size) => {
+    try {
+      setLoading(true);
+      const lang = i18n.language === "ar" ? "" : "en";
+      const response = await axiosInstance.get(
+        `/Event/UpComingEvents?language=${lang}&PageNumber=${page}&PageSize=${size}`
+      );
+      setUpcomingEvents(response.data.data.events || []);
+      setTotalCount(response.data.data.totalCount); // Assuming the API returns totalCount
+    } catch (error) {
+      console.error("Error fetching upcoming events", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  console.log(upcomingEvents)
   useEffect(() => {
-    const lang = i18n.language === "ar" ? "" : "en";
-    axiosInstance
-      .get(`/Event/UpComingEvents?language=${lang}`)
-      .then((res) => setUpcomingEvents(res.data.data))
-      .catch((err) => console.error(err));
-  }, [i18n.language]);
+    getUpcomingEvents(currentPage, pageSize);
+  }, [currentPage, i18n.language]);
+
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   const truncateText = (text, maxLength) => {
     if (!text) return "";
@@ -20,6 +48,8 @@ const EventCardsSection = () => {
       ? text
       : text.substring(0, maxLength) + "...";
   };
+
+  if (loading) return <LoadingSpinner />; // You can replace this with a loading spinner
 
   return (
     <>
@@ -60,6 +90,29 @@ const EventCardsSection = () => {
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      <Pagination className='mb-11 mt-11'>
+        {i18n.language === "ar" ? 
+                    <PaginationNext onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} /> : 
+                    <PaginationPrevious onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} /> }
+        <PaginationContent dir='ltr'>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <PaginationItem key={index + 1}>
+              <PaginationLink
+                isActive={currentPage === index + 1}
+                onClick={() => setCurrentPage(index + 1)}
+              >
+                {index + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+        </PaginationContent>
+         {i18n.language === "ar" ?
+                    <PaginationPrevious onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} />  : 
+                    <PaginationNext onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} />
+                  }
+      </Pagination>
     </>
   );
 };
