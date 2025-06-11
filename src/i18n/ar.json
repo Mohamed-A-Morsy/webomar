@@ -133,8 +133,16 @@
   "photoGallery": "معرض الصور ",
   "photoDescription": "لحظات مميزة من أنشطة وفعاليات النادي المختلفة",
   "morePhotos": "المزيد من الصور",
-  "chairMan": "رئيس مجلس الإدارة",
+  "chairMan": " مجلس الإدارة",
   "PresidentOfAl-JaziraClub": "رئيس نادي الجزيرة",
   "BoardOfDirectors": "اعضاء مجلس الادارة",
-  "Jobs": "الوظائف"
+  "Jobs": "الوظائف",
+  "Getreadytoenteranewworldofcontrolandprivacy": "استعد لدخول عالم جديد من التحكم و الخصوصية",
+  "account": "حساب",
+  "password": "كلمة المرور",
+  "Donthaveanaccount": "لا تمتلك حساب؟",
+  "Registeranewaccount": "تسجيل حساب جديد",
+  "LogOut": "تسجيل الخروج",
+  "LogIn": "تسجيل الدخول"
+
 }

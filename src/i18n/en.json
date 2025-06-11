@@ -131,8 +131,15 @@
   "photoGallery": "Photo Gallery",
   "photoDescription": "Special moments from the club's various activities and events",
   "morePhotos":"More photos",
-  "chairMan": "Chairman",
+  "chairMan": "Board of Directors",
   "PresidentOfAl-JaziraClub": "President of Al-Jazira Club",
   "BoardOfDirectors": "Board of Directors",
-  "Jobs": "Jobs"
+  "Jobs": "Jobs",
+  "Getreadytoenteranewworldofcontrolandprivacy": "Get ready to enter a new world of control and privacy",
+  "account": "account",
+  "password": "password",
+  "Donthaveanaccount": "Don't have an account?",
+  "Registeranewaccount": "Register a new account",
+  "LogIn": "Log In",
+  "LogOut": "Log Out"
 }

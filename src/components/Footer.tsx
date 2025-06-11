@@ -10,6 +10,7 @@ const Footer = () => {
  const [aboutClub, setAboutClub] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { i18n } = useTranslation();
+  const { t } = useTranslation();
   const plainText = aboutClub?.details?.replace(/<[^>]+>/g, '') || '';
 
   const getAboutClub = async () => {
@@ -79,22 +80,28 @@ return (
             <h4 className="font-bold text-lg mb-4">روابط سريعة</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-300 hover:text-accent">الرئيسية</Link>
+                <Link to="/" className="text-gray-300 hover:text-accent">{t("home")}</Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-300 hover:text-accent">عن النادي</Link>
+                <Link to="/News" className="text-gray-300 hover:text-accent">{t("news")}</Link>
               </li>
               <li>
-                <Link to="/activities" className="text-gray-300 hover:text-accent">الأنشطة</Link>
+                <Link to="/halls" className="text-gray-300 hover:text-accent">{t("halls")}</Link>
               </li>
               <li>
-                <Link to="/news" className="text-gray-300 hover:text-accent">الأخبار</Link>
+                <Link to="/events" className="text-gray-300 hover:text-accent">{t("events")}</Link>
               </li>
               <li>
-                <Link to="/gallery" className="text-gray-300 hover:text-accent">معرض الصور</Link>
+                <Link to="/chairman" className="text-gray-300 hover:text-accent">{t("chairMan")}</Link>
               </li>
               <li>
-                <Link to="/contact" className="text-gray-300 hover:text-accent">اتصل بنا</Link>
+                <Link to="/gallery" className="text-gray-300 hover:text-accent">{t("gallery")}</Link>
+              </li>
+              <li>
+                <Link to="/shops" className="text-gray-300 hover:text-accent">{t("shops")}</Link>
+              </li>
+              <li>
+                <Link to="/jobs" className="text-gray-300 hover:text-accent">{t("Jobs")}</Link>
               </li>
             </ul>
           </div>

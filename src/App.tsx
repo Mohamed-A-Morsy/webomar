@@ -23,11 +23,15 @@ import SocialActivitiesSection from "./components/SocialActivitiesSection";
 import SocialActivities from "./pages/SocialActivities";
 import ChairMan from "./pages/ChairMan";
 import Jobs from "./pages/Jobs";
+import Signin from "./components/sign/SignIn";
+import Signup from "./components/sign/SignUp";
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/SignUp" element={<Signup />} />
         <Route element={<Layout />}>
           <Route path="/" element={<Index />} />
           <Route path="/news" element={<News />} />
@@ -48,6 +52,7 @@ function App() {
           <Route path="/chairman" element={<ChairMan />} />
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/videos" element={<Videos />} />
+          
 
 
           

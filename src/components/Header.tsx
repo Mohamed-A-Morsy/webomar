@@ -5,15 +5,23 @@ import { ChevronLeft, Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import MobileHeader from "./MobileHeader";
 import clsx from "clsx";
+import Signin from "@/components/sign/SignIn";
 
 const Header = () => {
   const { t, i18n } = useTranslation();
   const isArabic = i18n.language === "ar";
   const [menuOpen, setMenuOpen] = useState(false);
 
+  
+
   const toggleLanguage = () => i18n.changeLanguage(isArabic ? "en" : "ar");
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
+
+  // if (!localStorage.getItem("token")) {
+  //   return <Signin />;
+  // }
+
   return (
     <header className="bg-white shadow-md" dir={isArabic ? "rtl" : "ltr"}>
       <div className="container mx-auto px-4">
@@ -74,6 +82,9 @@ const Header = () => {
             </Button>
             <Button asChild variant="ghost">
               <Link to="/jobs">{t("Jobs")}</Link>
+            </Button>
+            <Button asChild variant="ghost">
+              <Link to="/signin">{localStorage.getItem("token") ? t("LogOut") :  t("LogIn")}</Link>
             </Button>
           </nav>
           <div className="flex items-center space-x-2 space-x-reverse md:space-x-0">
